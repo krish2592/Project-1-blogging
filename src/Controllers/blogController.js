@@ -49,10 +49,8 @@ const getBlogs = async function (req, res) {
             if (Object.entries(findBLogs).length == 0)
                 return res.status(404).send({ status: false, msg: "Sorry!! No blogs found." })
             res.status(200).send({ status: true, msg: findBLogs })
-
         } else {
             let filter = { isDeleted: false, isPublished: true, ...userInput }
-
             const filterByInput = await blogModel.find(filter)
             if (Object.entries(filterByInput).length == 0)
                 return res.status(404).send({ status: false, msg: "Sorry!! No blogs found. Please enter valid Input." })
@@ -131,26 +129,48 @@ let deleteBlogById = async function (req, res) {
     }
 }
 // Delete by Query
+// let deleteBlogByQuery = async function (req, res) {
+//     try {
+//         let data = req.query
+//         if (!Object.keys(data).length)
+//             return res.status(400).send({ status: false, msg: "No user input" })
+//         let filter = { isDeleted: false, ...data }
+
+//         let findDocsById = await blogModel.find(filter).select({ _id: 1 })
+//         if (!findDocsById.length)
+//             return res.status(400).send({ status: false, msg: "Document Not found" })
+
+//         let deleteBlog = await blogModel.updateMany({ _id: findDocsById},
+//             { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
+//         res.status(200).send({ status: true, data: deleteBlog })
+//     }
+//     catch (err) {
+//         console.log(err.message)
+//         res.status(500).send({ status: false, error: err.msg })
+//     }
+// }
+
+
 let deleteBlogByQuery = async function (req, res) {
-    try {
-        let data = req.query
-        if (!Object.keys(data).length)
-            return res.status(400).send({ status: false, msg: "No user input" })
-        let filter = { isDeleted: false, ...data }
-
-        let findDocsById = await blogModel.find(filter).select({ _id: 1 })
-        if (!findDocsById.length)
-            return res.status(400).send({ status: false, msg: "Document Not found" })
-
-        let deleteBlog = await blogModel.updateMany({ _id: findDocsById},
-            { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
-        res.status(200).send({ status: true, data: deleteBlog })
+        try {
+            let data = req.query
+            if (!Object.keys(data).length)
+                return res.status(400).send({ status: false, msg: "No user input" })
+            let filter = { isDeleted: false, ...data }
+    
+            let findDocsById = await blogModel.find(filter).select({ _id: 1 })
+            if (!findDocsById.length)
+                return res.status(400).send({ status: false, msg: "Document Not found" })
+    
+            let deleteBlog = await blogModel.updateMany({ _id: findDocsById},
+                { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
+            res.status(200).send({ status: true, data: deleteBlog })
+        }
+        catch (err) {
+            console.log(err.message)
+            res.status(500).send({ status: false, error: err.msg })
+        }
     }
-    catch (err) {
-        console.log(err.message)
-        res.status(500).send({ status: false, error: err.msg })
-    }
-}
 
 module.exports.createBlog = createBlog
 module.exports.getBlogs = getBlogs
