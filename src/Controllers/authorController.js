@@ -59,7 +59,7 @@ let loginUser = async function (req, res) {
         if (!userId) return res.status(400).send({ status: false, msg: "User id is required" })
         if (!password) return res.status(400).send({ status: false, msg: "Password is required" })
         let getUser = await authorModel.findOne({ email: userId }).select({ password: 1 })
-        if (!Object.keys(getUser).length) return res.status(404).send({ status: false, msg: "User not found" })
+        if(!getUser) return res.status(404).send({ status: false, msg: "User not found" })
         const matchPassword = await bcrypt.compare(password, getUser.password)
         if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
         //To create token

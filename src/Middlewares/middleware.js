@@ -25,7 +25,7 @@ let authoriseUser = async function (req, res, next) {
         let blogId = req.params.blogId;
         if (!ObjectId.isValid(blogId)) return res.status(400).send({ status: false, msg: "Not a valid blog id" })
         let getAuthor = await blogModel.findById(blogId)
-        if (!Object.keys(getAuthor).length) return res.status(404).send({ status: false, msg: "No blog found" })
+        if (!getAuthor) return res.status(404).send({ status: false, msg: "No blog found" })
         if (decodeToken.authorId.toString() !== getAuthor.authorId.toString()) return res.status(401).send({ status: false, msg: "User is not a authorise user" })
         next();
     }
@@ -39,8 +39,9 @@ let authUser = async function (req, res, next) {
     try{
     let authorId = req.params.authorId
     if (!ObjectId.isValid(authorId)) return res.status(400).send({ status: false, msg: "Not a valid author id" })
-    const getAuthor = await authorModel.findById(authorId)
-    if(!Object.keys(getAuthor).length) return res.status(404).send({ status: false, msg: "No author found" })
+    let getAuthor = await authorModel.findById(authorId)
+    if(!getAuthor) return res.status(404).send({ status: false, msg: "No author found" })
+    console.log(ecodeToken.authorId.toString()===authorId.toString())
     if(decodeToken.authorId.toString()!==authorId.toString()) return res.status(401).send({ status: false, msg: "User is not a authorise user" })
     next()
 }
