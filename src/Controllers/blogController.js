@@ -20,7 +20,7 @@ let createBlog = async function (req, res) {
             // Validation of id exist or not
             let id = req.body.authorId
             let findAuthorId = await authorModel.findById(id)
-            if (!findAuthorId) return res.status(400).send({ status: false, msg: "Author Not found. Please enter a valid Author id." })
+            if (!findAuthorId) return res.status(404).send({ status: false, msg: "Author Not found. Please enter a valid Author id." })
             // Adding Publish date if true
             if (data.isPublished)
                 req.body['publishedAt'] = new Date()
@@ -160,7 +160,7 @@ let deleteBlogByQuery = async function (req, res) {
     
             let findDocsById = await blogModel.find(filter).select({ _id: 1 })
             if (!findDocsById.length)
-                return res.status(400).send({ status: false, msg: "Document Not found" })
+                return res.status(404).send({ status: false, msg: "Document Not found" })
     
             let deleteBlog = await blogModel.updateMany({ _id: findDocsById},
                 { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })

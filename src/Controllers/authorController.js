@@ -37,7 +37,6 @@ let createAuthor = async function (req, res) {
         else {
             return res.status(400).send({ status: false, msg: "NO USER INPUT" })
         }
-
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: err.message });
@@ -55,12 +54,17 @@ let loginUser = async function (req, res) {
         const matchPassword = await bcrypt.compare(password, getUser.password)
         if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
         //To create token
-        let token = jwt.sign({
-            authorId: getUser._id,
-            developer: "Sachin"
-        }, "GKjdk@Xp2");
-        res.setHeader("x-api-key",token);
-        return res.status(201).send({ status: true, data: token })
+        let token; 
+        try {
+            token = jwt.sign({
+                authorId: getUser._id,
+                developer: "Sachin"
+            }, "GKjdk@Xp2");
+        } catch (err) {
+            return res.status(400).send({ status: false, msg: "Error", error: err.message })
+        }
+        res.setHeader("x-api-key", token);
+        return res.status(201).send({ status: true, msg:  "User login sucessful" })
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: "Error", error: err.message })
