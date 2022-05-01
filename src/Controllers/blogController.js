@@ -62,7 +62,7 @@ const getBlogs = async function (req, res) {
 }
 
 // Update Blog 
-const updateBlogById = async function (req, res, next) {
+const updateBlogById = async function (req, res) {
     try {
         let id = req.params.blogId
         // ID validation
