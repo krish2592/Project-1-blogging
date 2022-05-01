@@ -113,7 +113,7 @@ const updateBlogById = async function (req, res) {
         else {
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: id },
                 {
-                    $set: { title: updatedTitle, body: updatedBody },
+                    $set: { title: updatedTitle, body: updatedBody, category: updatedCategory },
                     $push: { tags: updatedTag, subcategory: updatedSubcategory }
                 }, { new: true })
           

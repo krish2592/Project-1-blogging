@@ -28,7 +28,7 @@ const authorization1 = async function (req, res, next) {
         if (!ObjectId.isValid(blogId)) return res.status(400).send({ status: false, msg: "Not a valid blog id" })
         let getBlog = await blogModel.findById(blogId)
         if (!getBlog) return res.status(404).send({ status: false, msg: "Blog Not Found." })
-        if (decodeToken.authorId.toString() !== getBlog.authorId.toString()) return res.status(403).send({ status: false, msg: "You are not authorize to perform the action." })
+        if (decodeToken.authorId.toString() !== getBlog.authorId.toString()) return res.status(403).send({ status: false, msg: "You are not authorize to perform this action." })
         next();
     }
     catch (err) {
