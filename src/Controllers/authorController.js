@@ -1,15 +1,13 @@
-
 const authorModel = require("../Models/authorModel")
 const bcrypt = require('bcrypt')
 const saltRounds = 11;
 const jwt = require("jsonwebtoken")
 
-let emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;     //email validation
+let emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;                                 //email validation
 let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,15}$/    //password validation
-let nameRegex = /^[A-Za-z]{2,}$/    //Name validation
-
-const isValidTitle = function (title) {
-    return ['Mr', 'Mrs', 'Miss'].indexOf(title) !== -1     //enum validation
+let nameRegex = /^[A-Za-z]{2,}$/                                                                //Name validation
+const isValidTitle = function (title) {                                                         //enum validation
+    return ['Mr', 'Mrs', 'Miss'].indexOf(title) !== -1                                          
 }
 
 // Author Creation
@@ -59,16 +57,19 @@ const createAuthor = async function (req, res) {
         return res.status(500).send({ status: false, msg: err.message });
     }
 }
-
+// Author Login
 const loginUser = async function (req, res) {
     try {
 
         let userId = req.body.email;
         let password = req.body.password;
+      
         if (!userId) return res.status(400).send({ status: false, msg: "email is required." })
         if (!password) return res.status(400).send({ status: false, msg: "Password is required." })
+       
         let getUser = await authorModel.findOne({ email: userId }).select({ password: 1 })
         if (!getUser) return res.status(404).send({ status: false, msg: "Author not found!" })
+      
         let matchPassword = bcrypt.compare(password, getUser.password)
         if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect." })
         //To create token
