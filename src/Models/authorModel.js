@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-let validateEmail = function(email) {
-    let emailRegex = /^\w+[\.-]?\w+@\w+[\.-]?\w+(\.\w{1,3})+$/;  
+let validateEmail = function (email) {
+    let emailRegex = /^\w+[\.-]?\w+@\w+[\.-]?\w+(\.\w{1,3})+$/;
     return emailRegex.test(email)
 };
 

@@ -6,24 +6,16 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const createBlog = async function (req, res) {
     try {
         let data = req.body;
-        if (Object.keys(data).length != 0) {
+        if (Object.entries(data).length != 0) {
 
-            if (!data.title) return res.status(400).send({ status: false, msg: "Please Fill the required field title!" })
-            else if (data.title) {
-                if (!data.title.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field title!" })
-            }
-            if (!data.body) return res.status(400).send({ status: false, msg: "Please Fill the required field body!" })
-            else if (data.body) {
-                if (!data.body.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field body!" })
-            }
-            if (!data.authorId) return res.status(400).send({ status: false, msg: "Please Fill the required field Author details!" })
-            else if (data.authorId) {
-                if (!data.authorId.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field Author details!" })
-            }
-            if (!data.category) return res.status(400).send({ status: false, msg: "Please Fill the required field catergory!" })
-            else if (data.category) {
-                if (!data.category.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field catergory!" })
-            }
+            if (!data.title  || !data.title.trim() ) return res.status(400).send({ status: false, msg: "Please Fill the required field title!" })
+            
+            if (!data.body || !data.body.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field body!" })
+           
+            if (!data.authorId || !data.authorId.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field Author details!" })
+            
+            if (!data.category || !data.category.trim()) return res.status(400).send({ status: false, msg: "Please Fill the required field catergory!" })
+            
             // Validation of ID format
             if (!ObjectId.isValid(data.authorId)) return res.status(400).send({ status: false, msg: "Not a valid author ID" })
             // Validation of id exist or not
@@ -49,17 +41,17 @@ const createBlog = async function (req, res) {
 const getBlogs = async function (req, res) {
     try {
         let userInput = req.query
-        if (Object.keys(userInput).length == 0) {
+        if (Object.entries(userInput).length === 0) {
             let findBLogs = await blogModel.find({ isDeleted: false, isPublished: true })
             // If both condition false 
-            if (Object.entries(findBLogs).length == 0)
+            if (Object.entries(findBLogs).length === 0)
                 return res.status(404).send({ status: false, msg: "Sorry!! No blogs found." })
             return res.status(200).send({ status: true, msg: findBLogs })
         } else {
             let filter = { isDeleted: false, isPublished: true, ...userInput }
 
             const filterByInput = await blogModel.find(filter)
-            if (Object.entries(filterByInput).length == 0)
+            if (Object.entries(filterByInput).length === 0)
                 return res.status(404).send({ status: false, msg: "Sorry!! No blogs found. Please enter valid Input." })
             return res.status(200).send({ status: true, msg: filterByInput })
         }
@@ -78,7 +70,7 @@ const updateBlogById = async function (req, res) {
         if (!ObjectId.isValid(id)) return res.status(400).send({ status: false, msg: "Not a valid BLOG ID" })
         // Id verification
         let blogDetails = await blogModel.findById(id)
-        if (blogDetails.isDeleted) return res.status(404).send({ status: false, msg: "Blog is deleted" })
+        if (blogDetails.isDeleted) return res.status(404).send({ status: false, msg: "Blog not found." })
 
         let updatedData = req.body
         let updatedTitle = req.body.title
@@ -86,8 +78,10 @@ const updateBlogById = async function (req, res) {
         let updatedTag = req.body.tags
         let updatedSubcategory = req.body.subcategory
         let updatedCategory = req.body.category
+        
+        if (Object.entries(updatedData).length === 0) return res.status(400).send({ status: false, msg: "NO INPUT BY USER" })
 
-        if (!updatedTitle) {
+        if ( updatedTitle ) {
             return res.status(400).send({ status: false, msg: "Title can not be empty" })
         }
         else if (updatedTitle) {
@@ -105,7 +99,9 @@ const updateBlogById = async function (req, res) {
         else if (updatedCategory) {
             if (!updatedCategory.trim()) return res.status(400).send({ status: false, msg: "Category can not be empty" })
         }
-        if (Object.keys(updatedData).length == 0) return res.status(400).send({ status: false, msg: "NO INPUT BY USER" })
+
+       
+       
         // if book is not published 
         if (!blogDetails.isPublished) {
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: id },
