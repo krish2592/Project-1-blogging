@@ -18,7 +18,7 @@ const createAuthor = async function (req, res) {
         const data = req.body
         if (Object.keys(data).length != 0) {
 
-            if (!data.fname || !data.lname.trim() ) return res.status(400).send({ status: false, msg: "Please enter the required field fName" })
+            if (!data.fname || !data.fname.trim() ) return res.status(400).send({ status: false, msg: "Please enter the required field fName" })
            
             if (!data.lname || !data.lname.trim()) return res.status(400).send({ status: false, msg: "Please enter the required field lName" })
           

@@ -63,7 +63,7 @@ const getBlogs = async function (req, res) {
 }
 
 // Update Blog 
-const updateBlogById = async function (req, res) {
+const updateBlogById = async function (req, res, next) {
     try {
         let id = req.params.blogId
         // ID validation
@@ -80,27 +80,25 @@ const updateBlogById = async function (req, res) {
         let updatedCategory = req.body.category
         
         if (Object.entries(updatedData).length === 0) return res.status(400).send({ status: false, msg: "NO INPUT BY USER" })
-
-        if ( updatedTitle ) {
+       
+        if (updatedTitle=="") {
             return res.status(400).send({ status: false, msg: "Title can not be empty" })
         }
         else if (updatedTitle) {
             if (!updatedTitle.trim()) return res.status(400).send({ status: false, msg: "Title can not be empty" })
         }
-        if (!updatedBody) {
+        if (updatedBody=="") {
             return res.status(400).send({ status: false, msg: "Body can not be empty" })
         }
         else if (updatedBody) {
             if (!updatedBody.trim()) return res.status(400).send({ status: false, msg: "Body can not be empty" })
         }
-        if (!updatedCategory) {
+        if (updatedCategory=="") {
             return res.status(400).send({ status: false, msg: "Category can not be empty" })
         }
         else if (updatedCategory) {
             if (!updatedCategory.trim()) return res.status(400).send({ status: false, msg: "Category can not be empty" })
         }
-
-       
        
         // if book is not published 
         if (!blogDetails.isPublished) {
