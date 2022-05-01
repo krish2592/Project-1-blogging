@@ -71,3 +71,83 @@ Check if the blogId exists( and is not deleted). If it does, mark it deleted and
 If the blog document doesn't exist then return an HTTP status of 404 with a body like this
 
 **DELETE /blogs?queryParams**
+
+Delete blog documents by category, authorid, tag name, subcategory name, unpublished
+
+If the blog document doesn't exist then return an HTTP status of 404 with a body like this
+
+**Phase II**
+
+Add authentication and authroisation feature
+
+**POST /login**
+
+Allow an author to login with their email and password. On a successful login attempt return a JWT token contatining the authorId
+
+If the credentials are incorrect return a suitable error message with a valid HTTP status code
+
+**Authentication**
+
+Add an authorisation implementation for the JWT token that validates the token before every protected endpoint is called. If the validation fails, return a suitable error message with a corresponding HTTP status code
+
+Protected routes are create a blog, edit a blog, get the list of blogs, delete a blog(s)
+
+Set the token, once validated, in the request - x-api-key
+
+Use a middleware for authentication purpose.
+
+**Authorisation**
+
+Make sure that only the owner of the blogs is able to edit or delete the blog.
+
+In case of unauthorized access return an appropirate error message
+
+**Testing (Self-evaluation During Development)**
+
+To test these apis create a new collection in Postman named Project 1 Blogging
+
+Each api should have a new request in this collection
+
+Each request in the collection should be rightly named. Eg Create author, Create blog, Get blogs etc
+
+Each member of each team should have their tests in running state
+
+**Response**
+
+**Successful Response structure**
+
+{
+  status: true,
+  data: {
+
+  }
+}
+
+**Error Response structure**
+
+{
+  status: false,
+  msg: ""
+}
+
+**Collections**
+
+**Blogs**
+
+{
+  "title": "How to win friends",
+  "body": "Blog body",
+  "tags": ["Book", "Friends", "Self help"],
+  "category": "Book",
+  "subcategory": ["Non fiction", "Self Help"],
+  "published": false,
+  "publishedAt": "", // if published is true publishedAt will have a date 2021-09-17T04:25:07.803Z
+  "deleted": false,
+  "deletedAt": "", // if deleted is true deletedAt will have a date 2021-09-17T04:25:07.803Z,
+  "createdAt": "2021-09-17T04:25:07.803Z",
+  "updatedAt": "2021-09-17T04:25:07.803Z",
+}
+
+Refer https://jsonplaceholder.typicode.com/guide/ for some fake blogs data.
+
+Note: Create a group database and use the same database in connection string by replacing `groupXDatabase
