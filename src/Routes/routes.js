@@ -13,9 +13,9 @@ router.get("/test-me", function (req, res) {
 router.post("/authors", authorController.createAuthor)
 router.post("/blogs", middleware.authentication, blogController.createBlog)
 router.get("/blogs", middleware.authentication, blogController.getBlogs)
-router.put("/blogs/:blogId", middleware.authentication, middleware.authorization1, blogController.updateBlogById)
-router.delete("/blogs/:blogId", middleware.authentication, middleware.authorization1, blogController.deleteBlogById)
-router.delete("/blogs", middleware.authentication, middleware.authorization2, blogController.deleteBlogByQuery)
+router.put("/blogs/:blogId", middleware.authentication, middleware.authorization, blogController.updateBlogById)
+router.delete("/blogs/:blogId", middleware.authentication, middleware.authorization, blogController.deleteBlogById)
+router.delete("/blogs", middleware.authentication, blogController.deleteBlogByQuery)
 router.post("/login", authorController.loginUser)
 
 module.exports = router;
