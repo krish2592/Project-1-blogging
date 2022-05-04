@@ -143,7 +143,7 @@ const updateBlogById = async function (req, res) {
                 updatedSubcategoryData['subcategory'] = subcategory
             }
         }
-        // if book is not published 
+        // if blog is not published 
         if (!blogDetails.isPublished) {
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId },
                 {
@@ -151,9 +151,9 @@ const updateBlogById = async function (req, res) {
                     $addToSet: { tags: updatedTagData['tags'], subcategory: updatedSubcategoryData['subcategory'] }
                 }, { new: true })
 
-            return res.status(200).send({ status: true, msg: updatedBlog }, { new: true })
+            return res.status(200).send({ status: true,msg:"Updation successful", data: updatedBlog })
         }
-        // if book is already published
+        // if blog is already published
         else {
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId },
                 {
@@ -221,7 +221,8 @@ const deleteBlogByQuery = async function (req, res) {
 
         let deleteBlog = await blogModel.updateMany({ _id: IdOffilterBlog},
             { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
-        return res.status(200).send({ status: true, msg: "Blog deleted sucessfully", data: deleteBlog })
+            
+        return res.status(200).send({ status: true, data: deleteBlog })
     }
     catch (err) {
         console.log(err.message)

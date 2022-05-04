@@ -25,7 +25,7 @@ const authentication = function (req, res, next) {
 // Blog Id authorization
 const authorization = async function (req, res, next) {
     try {
-        let blogId = req.params.blogId || req.query
+        let blogId = req.params.blogId || req.query.blogId
         if (!ObjectId.isValid(blogId)) return res.status(400).send({ status: false, msg: "Not a valid blog id" })
         let getBlog = await blogModel.findById(blogId)
         if (!getBlog) return res.status(404).send({ status: false, msg: "Blog Not Found." })

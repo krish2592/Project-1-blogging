@@ -34,7 +34,7 @@ const createAuthor = async function (req, res) {
        
         const authorData = { fname, lname, title, email, password }
         const savedData = await authorModel.create(authorData);
-        return res.status(201).send({ status: true, msg: savedData });
+        return res.status(201).send({ status: true,msg:"User registration sucessful", data: savedData });
     }
     catch (err) {
         console.log(err.message)
@@ -57,7 +57,7 @@ const loginUser = async function (req, res) {
         if (!isValidPassword(password)) return res.status(400).send({ status: false, msg: "Your password must contain atleast one number,uppercase,lowercase and special character[ @ $ ! % * ? & ] and length should be min of 6-15 charachaters" })
 
         let getUser = await authorModel.findOne({ email: email }).select({ password: 1 })
-        if (!getUser) return res.status(401).send({ status: false, msg: `${email} is incoorect` })
+        if (!getUser) return res.status(401).send({ status: false, msg: `${email} is incorrect` })
 
         let matchPassword = await bcrypt.compare(password, getUser.password)
         if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect." })
