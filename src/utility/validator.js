@@ -21,7 +21,7 @@ let isValidObjectId = function (objectId) {
 
 //   /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
 let isValidEmail = function (email) {
-    let emailRegex =  /^\w+[\.-]?\w+@?\w+([\.-]?\w+)(\.+?\w+){1,3}$/;
+    let emailRegex =  /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
     return emailRegex.test(email) 
 }
 
