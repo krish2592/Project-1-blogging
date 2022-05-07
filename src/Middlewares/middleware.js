@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const blogModel = require("../Models/blogModel");
 const { isValidObjectId ,isValid} = require("../utility/validator");
 
-let decodeToken;
 //Authentication
 const authentication = async function (req, res, next) {
     try {
@@ -30,7 +29,7 @@ const authorization = async function (req, res, next) {
       
         let getBlog = await blogModel.findById(blogId)
         if (!getBlog) return res.status(404).send({ status: false, msg: "Blog Not Found." })
-        if (decodeToken.authorId.toString() !== getBlog.authorId.toString()) return res.status(403).send({ status: false, msg: "You are not authorize to perform this operation" })
+        if (req.authorId.toString() !== getBlog.authorId.toString()) return res.status(403).send({ status: false, msg: "You are not authorize to perform this operation" })
         next();
     }
     catch (err) {
