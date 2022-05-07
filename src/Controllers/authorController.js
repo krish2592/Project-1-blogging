@@ -2,7 +2,7 @@ const authorModel = require("../Models/authorModel")
 const bcrypt = require('bcrypt')
 const saltRounds = 11;
 const jwt = require("jsonwebtoken")
-const { isValidRequestBody, isValid, isValidEmail, isValidPassword, isValidName, isValidTitle } = require("../Controllers/validator")
+const { isValidRequestBody, isValid, isValidEmail, isValidPassword, isValidName, isValidTitle } = require("../utility/validator")
 
 // Author Registration
 const createAuthor = async function (req, res) {
@@ -69,7 +69,7 @@ const loginUser = async function (req, res) {
         }, "GKjdk@Xp2");
 
         res.setHeader("x-api-key", token);
-        return res.status(200).send({ status: true, msg: "User login successfull!" })
+        return res.status(200).send({ status: true, msg: "User login successfull!", data:{token:token} })
     }
     catch (err) {
         console.log(err.message)

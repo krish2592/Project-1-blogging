@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const authorModel = require("../Models/authorModel");
 const blogModel = require("../Models/blogModel");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -11,7 +10,7 @@ const authentication = function (req, res, next) {
         if (!token) token = req.headers["X-Api-Key"]
         if (!token) return res.status(400).send({ status: false, msg: "You are not logged in. Token is required." })
         try {
-            decodeToken = jwt.verify(token, "GKjdk@Xp2")
+            decodeToken =  jwt.verify(token, "GKjdk@Xp2")
             req.authorId=decodeToken.authorId
         } catch (err) {
             return res.status(401).send({ status: false, msg: "Invalid Token", error: err.message })

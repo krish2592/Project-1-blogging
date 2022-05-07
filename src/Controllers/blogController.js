@@ -1,6 +1,6 @@
 const authorModel = require("../Models/authorModel")
 const blogModel = require("../Models/blogModel");
-const { isValid, isValidObjectId, isValidRequestBody } = require("./validator");
+const { isValid, isValidObjectId, isValidRequestBody } = require("../utility/validator");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 // Blog Creation
@@ -103,6 +103,7 @@ const updateBlogById = async function (req, res) {
         // Id verification
         let blogDetails = await blogModel.findOne({ _id: blogId, isDeleted: false, deletedAt: null })
         if (!blogDetails) return res.status(404).send({ status: false, msg: "Blog not found." })
+        const { isPublished } =blogDetails;
         let requestBody = req.body
         if (!isValidRequestBody(requestBody)) return res.status(400).send({ status: false, msg: "NO INPUT BY USER" })
         let { title, body, tags, category, subcategory } = requestBody;
@@ -143,22 +144,27 @@ const updateBlogById = async function (req, res) {
                 updatedSubcategoryData['subcategory'] = subcategory
             }
         }
+
+        const setIfNotPublished ={ title: title, body: body, category: category, isPublished: true, publishedAt: new Date() }
+        const addToSetIfNotPublished={ tags: updatedTagData['tags'], subcategory: updatedSubcategoryData['subcategory'] }
         // if blog is not published 
-        if (!blogDetails.isPublished) {
+        if (!isPublished) {
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId },
                 {
-                    $set: { title: title, body: body, category: category, isPublished: true, publishedAt: new Date() },
-                    $addToSet: { tags: updatedTagData['tags'], subcategory: updatedSubcategoryData['subcategory'] }
+                    $set: setIfNotPublished,
+                    $addToSet: addToSetIfNotPublished
                 }, { new: true })
 
             return res.status(200).send({ status: true,msg:"Updation successful", data: updatedBlog })
         }
         // if blog is already published
         else {
+            const setIfPublished={ title: title, body: body, category: category }
+            const addToSetPublished={ tags: updatedTagData['tags'], subcategory: updatedSubcategoryData['subcategory'] }
             let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId },
                 {
-                    $set: { title: title, body: body, category: category },
-                    $addToSet: { tags: updatedTagData['tags'], subcategory: updatedSubcategoryData['subcategory'] }
+                    $set:setIfPublished ,
+                    $addToSet: addToSetPublished
                 }, { new: true })
 
             return res.status(200).send({ status: true, msg: updatedBlog })
@@ -195,7 +201,6 @@ const deleteBlogByQuery = async function (req, res) {
         if (!isValidRequestBody(queryParams)) return res.status(400).send({ status: false, msg: "No query recieved for delete operation" })
         let filterQuery = { isDeleted: false, deletedAt: null }
         let { authorId, tags, category, subcategory, isPublished } = queryParams;
-
         if (isValid(authorId) && isValidObjectId(authorId)) {
             filterQuery['authorId'] = authorId;
         }

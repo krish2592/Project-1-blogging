@@ -32,7 +32,7 @@ let isValidPassword = function(password) {
 }
 
 let isValidName=function(name){
-    let nameRegex = /^[A-Za-z]{1,15}$/ 
+    let nameRegex = /^[A-Za-z\s]{1,15}$/ 
     return nameRegex.test(name);
 }
 
@@ -40,6 +40,5 @@ let isValidTitle= function(title) {
     return ["Mr", "Mrs","Miss"].indexOf(title) !==-1;
 }
 
-//let isArray= function(array)
 
 module.exports = {isValidRequestBody,isValid,isValidObjectId,isValidEmail,isValidPassword,isValidName,isValidTitle}

@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
-
-let validateEmail = function (email) {
-    let emailRegex = /^\w+[\.-]?\w+@\w+[\.-]?\w+(\.\w{1,3})+$/;
-    return emailRegex.test(email)
-};
+const {isValidEmail} = require("../utility/validator")
 
 const authorSchema = mongoose.Schema(
     {
@@ -31,7 +27,7 @@ const authorSchema = mongoose.Schema(
             unique: true,
             lowercase: true,
             trim: true,
-            validate: [validateEmail, "Please enter a valid email address"],
+            validate: [isValidEmail, "Please enter a valid email address"],
         },
         password: {
             type: String,
